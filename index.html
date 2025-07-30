@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DentAssist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --aurora-bg: #0D1120;
+        --aurora-surface: #1A2035;
+        --aurora-border: #2A314E;
+        --aurora-text-primary: #F0F2FF;
+        --aurora-text-secondary: #A9B2D3;
+
+        --brand-aurora-start: #7928CA;
+        --brand-aurora-end: #00A3FF;
+        --brand-aurora-secondary: #00E0B8;
+
+        --radius-sm: 0.5rem;
+        --radius-md: 0.75rem;
+        --radius-lg: 1rem;
+        
+        --angle: 0deg;
+        
+        --aurora-glow-start: var(--brand-aurora-start);
+        --aurora-glow-end: var(--brand-aurora-end);
+      }
+      
+      @property --angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+      }
+
+      body {
+        overscroll-behavior-y: contain;
+        background-color: var(--aurora-bg);
+        color: var(--aurora-text-primary);
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::after { /* Noise layer */
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><filter id="noise" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
+        opacity: 0.03;
+        z-index: -1;
+        pointer-events: none;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: var(--aurora-bg); }
+      ::-webkit-scrollbar-thumb { background: var(--aurora-border); border-radius: 5px; border: 2px solid var(--aurora-bg); }
+      ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+
+      /* Aurora Border Glow Effect */
+      .aurora-border-glow {
+        position: relative;
+        border: 1px solid var(--aurora-border);
+        transition: border-color 0.3s ease;
+      }
+      .aurora-border-glow::before,
+      .aurora-border-glow::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1px;
+        background: conic-gradient(from var(--angle), var(--aurora-glow-start), var(--aurora-glow-end), var(--aurora-glow-start));
+        -webkit-mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: rotate 4s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .aurora-border-glow:hover {
+        border-color: transparent;
+      }
+      .aurora-border-glow:hover::before {
+        opacity: 1;
+      }
+      @keyframes rotate {
+        to { --angle: 360deg; }
+      }
+      
+      /* Glassmorphism Effect */
+      .glass-effect {
+        background-color: rgba(26, 32, 53, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-color: rgba(42, 49, 78, 0.8);
+      }
+      
+      /* Skeleton Loader */
+      @keyframes shimmer { 100% { transform: translateX(100%); } }
+      .skeleton-loader {
+        position: relative; overflow: hidden; background-color: #2A314E;
+      }
+      .skeleton-loader::after {
+        position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(90deg, #2A314E00 0, #2A314E66 20%, #2A314E99 60%, #2A314E00);
+        animation: shimmer 2s infinite; content: '';
+      }
+      
+      /* Command Palette specific styles */
+      .command-palette-item[data-active='true'] {
+          background-color: var(--brand-aurora-end);
+          color: var(--aurora-bg);
+      }
+       .command-palette-item[data-active='true'] svg {
+          color: var(--aurora-bg) !important;
+      }
+
+      /* Staggered Animation Children */
+      .stagger-children > * {
+        animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+      .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+      .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+      .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+      .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+      .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              'background-dark': 'var(--aurora-bg)',
+              'surface-dark': 'var(--aurora-surface)',
+              'border-dark': 'var(--aurora-border)',
+              'text-primary-dark': 'var(--aurora-text-primary)',
+              'text-secondary-dark': 'var(--aurora-text-secondary)',
+              'brand-primary': 'var(--brand-aurora-end)',
+              'brand-secondary': 'var(--brand-aurora-secondary)',
+              'brand-aurora-start': 'var(--aurora-glow-start)',
+              'brand-aurora-end': 'var(--aurora-glow-end)',
+            },
+            borderRadius: {
+                'sm': 'var(--radius-sm)',
+                'md': 'var(--radius-md)',
+                'lg': 'var(--radius-lg)',
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in-out forwards',
+              'slide-in-up': 'slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideInUp: { '0%': { opacity: '0', transform: 'translateY(30px) scale(0.98)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
+            },
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.8.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.417.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
+    "date-fns": "https://esm.sh/date-fns@^4.1.0",
+    "react-dom": "https://esm.sh/react-dom@^19.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-background-dark font-sans">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

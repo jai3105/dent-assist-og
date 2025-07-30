@@ -1,0 +1,9 @@
+{
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "name": " DentAssist: The Dental Super-App OG",
+  "description": "",
+  "prompt": ""
+}

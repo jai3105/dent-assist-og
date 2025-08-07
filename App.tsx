@@ -21,7 +21,7 @@ import { PublicDashboard } from './components/dashboards/PublicDashboard';
 // Feature Components
 import { Dentforge } from './components/features/Dentforge';
 import { Dentomedia } from './components/features/Dentomedia';
-import { DentaHunt } from './components/features/DentaHunt';
+import { DentaHunt } from './components/features/Dentahunt';
 import { Dentafeed } from './components/features/Dentafeed';
 import { Dentaround } from './components/features/Dentaround';
 import { Dentradar } from './components/features/Dentradar';
@@ -34,7 +34,7 @@ import { DentaScribe } from './components/features/DentaScribe';
 import { Settings } from './components/features/Settings';
 import { DentaMart } from './components/features/DentaMart';
 import { DentaLabConnect } from './components/features/DentaLabConnect';
-import { DentaVersity } from './components/features/DentaVersity';
+import { DentaVersity } from './components/features/Dentaversity';
 import { DentaVault } from './components/features/DentaVault';
 import { DentalDiary } from './components/features/DentalDiary';
 import { SymptomChecker } from './components/features/SymptomChecker';
